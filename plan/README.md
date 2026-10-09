@@ -27,7 +27,13 @@ This fork adds a Met Office-direct weather radar to Breezy Weather (personal use
 4. Write the Kotlin (Phase 3 source adapter → Phase 4 `CARD_RADAR`); compile + test on build PC.
 5. Keep `plan/` (here) and `weather/*.md` (dev PC mirror) in sync — they drifted once already; `diff -q` before every commit.
 
-## Constraints of this PC
+## Constraints of a no-SDK PC (and how to recreate this one's setup)
 - No JDK/Android SDK, no big downloads (bandwidth-limited, intermittently offline).
-- Python venv at `/tmp/wx` (h5py, netCDF4, numpy, Pillow, pyproj, pytest). Fixtures at `/tmp/radar.h5`, `/tmp/precip.nc`.
 - TDD per project rules: tests first (`pipeline/tests/`), run with `PYTHONPATH=pipeline/src python -m pytest pipeline/tests/`.
+- Recreate the Python env anywhere (small downloads only):
+  `python3 -m venv /tmp/wx && /tmp/wx/bin/pip install -r pipeline/requirements.txt`
+- Re-fetch the exact test fixtures (or set `WX_RADAR_FIXTURE` / `WX_UKV_FIXTURE` to any same-format files):
+  `curl -o /tmp/radar.h5 https://met-office-radar-obs-data.s3.eu-west-2.amazonaws.com/radar/2026/10/09/202610091745_ODIM_ng_radar_rainrate_composite_1km_UK.h5`
+  `curl -o /tmp/precip.nc https://met-office-atmospheric-model-data.s3.eu-west-2.amazonaws.com/uk-deterministic-2km/20261009T1400Z/20261009T1745Z-PT0003H45M-precipitation_rate.nc`
+- Reference clones used during research (only re-clone if you must re-check something; findings are in `plan/research/`):
+  `github.com/breezy-weather/breezy-weather`, `github.com/digiexchris/RoadTripRadar`, `github.com/bmaroti9/Overmorrow`
