@@ -26,7 +26,7 @@ A Breezy Weather fork with UK-first Met Office data and a **best-in-class scrubb
 |---|---|---|
 | 0. Spikes | A: one AWS radar HDF5 → tiles (bucket layout, sizes, LUT calibration). B: UKV NetCDF precip steps (timestep granularity) | ✅ done 2026-10-09 — see `research/spikes-phase0.md` + `evidence/` |
 | 1. Fork + toolchain | Fork Breezy, build freenet flavor, sideload to Xiaomi | App runs on device |
-| 2. Pipeline | 15-min cron → tiles + snapshot + manifest.json | Phone loads manifest + tiles over LAN/tunnel |
+| 2. Pipeline | 15-min cron → tiles + snapshot + manifest.json | ✅ code done, pytest 19/19, offline render verified (push pending — PC offline) |
 | 3. Met Office source | `sources/metoffice/` adapter, quota-safe polling | Forecast renders for saved locations |
 | 4. Radar UI | `CARD_RADAR` snapshot card + detail map + scrub bar, day/night styles | Acceptance criteria in REQUIREMENTS.md pass |
 | 5. Polish | Prefetch, offline cache, ramp tune vs Met Office legend | Feels native; snapshot fresh |
