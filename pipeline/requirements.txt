@@ -1,0 +1,6 @@
+h5py
+netCDF4
+numpy
+Pillow
+pyproj
+pytest
