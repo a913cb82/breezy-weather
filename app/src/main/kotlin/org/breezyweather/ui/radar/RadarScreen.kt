@@ -47,12 +47,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.breezyweather.R
-import org.breezyweather.ui.theme.compose.BreezyWeatherTheme
 import org.breezyweather.radar.RadarConfig
 import org.breezyweather.radar.RadarFrame
 import org.breezyweather.radar.RadarLut
 import org.breezyweather.radar.RadarManifest
 import org.breezyweather.radar.RadarRepository
+import org.breezyweather.ui.theme.compose.BreezyWeatherTheme
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.expressions.dsl.const
@@ -86,45 +86,46 @@ fun RadarScreen(
     }
 
     BreezyWeatherTheme {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.radar)) },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.radar)) },
+                    navigationIcon = {
+                        IconButton(onClick = onBackPressed) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                        }
                     }
+                )
+            }
+        ) { padding ->
+            val m = manifest
+            when {
+                m == null && !failed -> Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
                 }
-            )
-        }
-    ) { padding ->
-        val m = manifest
-        when {
-            m == null && !failed -> Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+                m == null -> Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(stringResource(R.string.radar_unavailable))
+                }
+                m.frames.isEmpty() -> Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(stringResource(R.string.radar_unavailable))
+                }
+                else -> RadarMap(
+                    manifest = m,
+                    modifier = Modifier.fillMaxSize().padding(padding)
+                )
             }
-            m == null -> Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(stringResource(R.string.radar_unavailable))
-            }
-            m.frames.isEmpty() -> Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(stringResource(R.string.radar_unavailable))
-            }
-            else -> RadarMap(
-                manifest = m,
-                modifier = Modifier.fillMaxSize().padding(padding)
-            )
         }
     }
-    }
+}
 
 @Composable
 private fun RadarMap(
