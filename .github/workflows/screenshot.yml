@@ -46,3 +46,11 @@ jobs:
           name: app-screenshots
           path: app/build/outputs/roborazzi/
           retention-days: 14
+
+      - name: Upload test results (diagnostics)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: app/build/test-results/testFreenetDebugUnitTest/
+          retention-days: 7
