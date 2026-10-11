@@ -42,7 +42,8 @@ jobs:
       - name: Assemble freenet debug
         run: ./gradlew assembleFreenetDebug --console=plain
 
-      - name: Install emulator system deps
+      - name: Install emulator system deps (Linux only)
+        if: runner.os == 'Linux'
         run: sudo apt-get update -qq && sudo apt-get install -y -qq libpulse0
 
       - name: Run emulator + capture
