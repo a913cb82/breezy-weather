@@ -1,6 +1,6 @@
 # Weather App — Plan
 
-> Status: `planned` — research in `research/`, scope in `REQUIREMENTS.md`, design in `ARCHITECTURE.md`, decisions in `DECISIONS.md`.
+> Status: `active` — full build-out to shippable radar underway (2026-10-11). Research in `research/`, scope in `REQUIREMENTS.md`, design in `ARCHITECTURE.md`, decisions in `DECISIONS.md`.
 
 ## Vision
 A Breezy Weather fork with UK-first Met Office data and a **best-in-class scrubbable weather radar** as the headline feature. Personal use, single Android device (Xiaomi 15 Ultra), inside Met Office free quotas.
@@ -25,10 +25,10 @@ A Breezy Weather fork with UK-first Met Office data and a **best-in-class scrubb
 | Phase | Work | Exit criteria |
 |---|---|---|
 | 0. Spikes | A: one AWS radar HDF5 → tiles (bucket layout, sizes, LUT calibration). B: UKV NetCDF precip steps (timestep granularity) | ✅ done 2026-10-09 — see `research/spikes-phase0.md` + `evidence/` |
-| 1. Fork + toolchain | Fork Breezy, build freenet flavor, sideload to Xiaomi | App runs on device |
-| 2. Pipeline | 15-min cron → tiles + snapshot + manifest.json | ✅ code done, pytest 19/19, offline render verified (push pending — PC offline) |
-| 3. Met Office source | `sources/metoffice/` adapter, quota-safe polling | Forecast renders for saved locations |
-| 4. Radar UI | `CARD_RADAR` snapshot card + detail map + scrub bar, day/night styles | Acceptance criteria in REQUIREMENTS.md pass |
+| 1. Fork + toolchain | Fork Breezy, build freenet flavor, sideload to Xiaomi — ✅ build half done 2026-10-11 via personal CI (`personal-build.yml`, green run 38131819530, APK verified `org.breezyweather.debug` sdk37); device install/launch pending (needs adb + phone) | App runs on device |
+| 2. Pipeline | 15-min cron → tiles + snapshot + manifest.json — ✅ code done, pytest 19/19, offline render verified (`origin/phase/2-pipeline`, 4 commits). Deploy gaps (2026-10-11): no cron unit, no tile hosting, no retention pruning, 404 aborts whole cycle, `max()` crashes on empty obs, run probing fragile. Contract: manifest LUT is `[{min_mm_h,color}]`. ⚠️ merge deletes `personal-build.yml` — restore on merge | Live cycle + hosted manifest |
+| 3. Met Office source | `sources/metoffice/` adapter, quota-safe polling — mapped 2026-10-11: template = `brightsky/` (`HttpSource`+`WeatherSource`), register in `SourceManager` national list, key via `breezy.metoffice.key`→`BuildConfig`; stub + nonfreenet impl exist | Forecast renders for saved locations |
+| 4. Radar UI | `CARD_RADAR` snapshot card + detail map + scrub bar, day/night styles — mapped 2026-10-11: `CardDisplay` enum + `MainAdapter`/`ViewType`/holders, no map SDK yet (add maplibre), LUT inversion reads manifest `min_mm_h` | Acceptance criteria in REQUIREMENTS.md pass |
 | 5. Polish | Prefetch, offline cache, ramp tune vs Met Office legend | Feels native; snapshot fresh |
 
-Phase 0 is done and the data side is fully proven. Start with Phase 1 (fork + toolchain).
+Phases 0–2 code done; build-out order: finish Phase 1 device check → deploy Phase 2 live (cron + hosting + robustness) → write Phase 3 → Phase 4 → Phase 5.

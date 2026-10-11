@@ -2,11 +2,12 @@
 
 This fork adds a Met Office-direct weather radar to Breezy Weather (personal use, one Android phone). You are on branch `phase/2-pipeline` unless noted otherwise.
 
-## Where we are (2026-10-09)
+## Where we are (2026-10-11)
 - ✅ Phase 0 (spikes): `plan/research/spikes-phase0.md` + `plan/research/evidence/` — live S3 probes, renders.
-- ✅ Phase 2 (pipeline): `pipeline/` implemented TDD (19 pytest), offline end-to-end verified. **NOT yet pushed** (PC was offline) — push first when network returns.
-- ⏳ Phase 1 (fork build): must happen on the build PC — `./gradlew assembleFreenetDebug` (`plan/BUILD.md`). Never attempted here (no JDK/SDK on this PC by choice).
-- ⏳ Phase 3 (Met Office source), Phase 4 (radar UI): Kotlin, unwritten. Writable here but **not compilable here** — flag everything for build-PC verification.
+- ✅ Phase 2 (pipeline) code: on `origin/phase/2-pipeline` (4 commits, 19 pytest), offline end-to-end verified. Deploy gaps tracked in `plan/PLAN.md` (cron, hosting, retention, 404/crash robustness). ⚠️ merging it deletes `.github/workflows/personal-build.yml` — restore on merge.
+- ✅ Phase 1 build half: green CI via `.github/workflows/personal-build.yml` (free public-repo runners, APK artifact verified). Device install/launch pending (needs adb + phone).
+- 🗺️ Phase 3/4 integration mapped (brightsky template, `SourceManager`, `CardDisplay`/`MainAdapter`, no map SDK yet). Kotlin unwritten; all Kotlin verified via CI — this PC can't dex (3.7 GB RAM).
+- Mission: full build-out to shippable radar, tracked in `plan/PLAN.md` + `REQUIREMENTS.md` checkboxes + `DECISIONS.md` (append-only).
 
 ## Branch map
 - `main` = upstream + `plan/` docs only (pushed to `a913cb82/breezy-weather`).
@@ -21,10 +22,10 @@ This fork adds a Met Office-direct weather radar to Breezy Weather (personal use
 5. `plan/research/` — background; `spikes-phase0.md` is the most load-bearing.
 
 ## Next steps (in order)
-1. Push `phase/2-pipeline` (and confirm `main` is in sync with GitHub).
-2. Build PC: validate freenet APK (Phase 1 exit criteria in `plan/BUILD.md`).
-3. Connected PC: one full live pipeline cycle (`pipeline/README.md`), check wall-time < 15 min.
-4. Write the Kotlin (Phase 3 source adapter → Phase 4 `CARD_RADAR`); compile + test on build PC.
+1. Device: adb bridge + install + launch check (Phase 1 exit; needs phone plugged in + `usbipd`).
+2. Pipeline live: one full live cycle to a scratch dir (wall-time < 15 min), then cron + tile hosting + retention + robustness fixes (Phase 2 deploy gaps in `plan/PLAN.md`).
+3. Kotlin via CI: Phase 3 adapter → Phase 4 `CARD_RADAR`, each step green in `personal-build` before merging.
+4. Tick `plan/REQUIREMENTS.md` checkboxes as acceptance criteria pass; append to `plan/DECISIONS.md`, never rewrite.
 5. Keep `plan/` (here) and `weather/*.md` (dev PC mirror) in sync — they drifted once already; `diff -q` before every commit.
 
 ## Constraints of a no-SDK PC (and how to recreate this one's setup)

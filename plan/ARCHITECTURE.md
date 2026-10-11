@@ -19,7 +19,7 @@ Met Office AWS open data (S3)          DataHub API
 
 ## Pipeline (home PC/Pi/VPS)
 - Fetch latest radar composite + UKV precip steps; render XYZ PNGs z0–7 (SDK overzooms beyond).
-- Emit `manifest.json`: `{ generated, now_index, lut: [{ max_mm_h, color }], frames: [{ t, kind: "obs"|"model", run, tiles: "<url>/{z}/{x}/{y}.png" }], snapshot: "<url>/snapshot.png", coverage: "<url>/mask/…" }`. The embedded LUT lets the app invert tile pixels into band readouts without a data API.
+- Emit `manifest.json`: `{ generated, now_index, lut: [{ min_mm_h, color }], frames: [{ t, kind: "obs"|"model", run, tiles: "<url>/{z}/{x}/{y}.png" }], snapshot: "<url>/snapshot.png", coverage: "<url>/mask/…" }`. The embedded LUT lets the app invert tile pixels into band readouts without a data API.
 - Serve over HTTP (Tailscale/tunnel to phone); phone caches tiles + prefetches via WorkManager.
 
 ## App (fork, freenet flavor)
