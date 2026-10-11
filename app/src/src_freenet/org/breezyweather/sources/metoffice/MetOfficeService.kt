@@ -18,30 +18,287 @@ package org.breezyweather.sources.metoffice
 
 import android.content.Context
 import breezyweather.domain.location.model.Location
+import breezyweather.domain.source.SourceContinent
 import breezyweather.domain.source.SourceFeature
+import breezyweather.domain.weather.model.Precipitation
+import breezyweather.domain.weather.model.PrecipitationProbability
+import breezyweather.domain.weather.model.UV
+import breezyweather.domain.weather.model.Wind
+import breezyweather.domain.weather.reference.WeatherCode
+import breezyweather.domain.weather.wrappers.DailyWrapper
+import breezyweather.domain.weather.wrappers.HalfDayWrapper
+import breezyweather.domain.weather.wrappers.HourlyWrapper
+import breezyweather.domain.weather.wrappers.TemperatureWrapper
 import breezyweather.domain.weather.wrappers.WeatherWrapper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.core.Observable
-import org.breezyweather.common.exceptions.NonFreeNetSourceException
+import org.breezyweather.BuildConfig
+import org.breezyweather.R
+import org.breezyweather.common.exceptions.InvalidOrIncompleteDataException
+import org.breezyweather.common.extensions.currentLocale
+import org.breezyweather.common.extensions.getCountryName
+import org.breezyweather.common.extensions.toCalendarWithTimeZone
+import org.breezyweather.common.preference.EditTextPreference
 import org.breezyweather.common.preference.Preference
+import org.breezyweather.common.source.ConfigurableSource
+import org.breezyweather.common.source.HttpSource
+import org.breezyweather.common.source.WeatherSource
+import org.breezyweather.common.source.WeatherSource.Companion.PRIORITY_HIGHEST
+import org.breezyweather.common.source.WeatherSource.Companion.PRIORITY_NONE
+import org.breezyweather.domain.settings.SourceConfigStore
+import org.breezyweather.sources.metoffice.json.MetOfficeDaily
+import org.breezyweather.sources.metoffice.json.MetOfficeForecast
+import org.breezyweather.sources.metoffice.json.MetOfficeHourly
+import org.breezyweather.unit.distance.Distance.Companion.meters
+import org.breezyweather.unit.precipitation.Precipitation.Companion.millimeters
+import org.breezyweather.unit.pressure.Pressure.Companion.pascals
+import org.breezyweather.unit.ratio.Ratio.Companion.percent
+import org.breezyweather.unit.speed.Speed.Companion.metersPerSecond
+import org.breezyweather.unit.temperature.Temperature.Companion.celsius
+import retrofit2.Retrofit
+import java.util.Calendar
+import java.util.TimeZone
 import javax.inject.Inject
+import javax.inject.Named
 
+/**
+ * Freenet Met Office implementation (DataHub site-specific hourly/daily).
+ * Deliberately does NOT extend [MetOfficeServiceStub]: the stub carries
+ * [org.breezyweather.common.source.NonFreeNetSource], which SourceManager
+ * filters out of freenet builds. Same source id ("metoffice") so settings
+ * and source selection treat both flavors as one source.
+ */
 class MetOfficeService @Inject constructor(
     @ApplicationContext context: Context,
-) : MetOfficeServiceStub(context) {
+    @Named("JsonClient") client: Retrofit.Builder,
+) : HttpSource(),
+    WeatherSource,
+    ConfigurableSource {
 
-    override val privacyPolicyUrl = ""
+    override val id = "metoffice"
+    override val name = "Met Office (${context.currentLocale.getCountryName("GB")})"
+    override val continent = SourceContinent.EUROPE
+    override val privacyPolicyUrl = "https://www.metoffice.gov.uk/policies/privacy"
+
+    protected val weatherAttribution = "Met Office"
+    override val supportedFeatures = mapOf(
+        SourceFeature.FORECAST to weatherAttribution
+    )
+
+    override fun getFeaturePriorityForLocation(
+        location: Location,
+        feature: SourceFeature,
+    ): Int {
+        return when {
+            arrayOf("GB", "GG", "IM", "JE", "GI", "FK").any {
+                location.countryCode.equals(it, ignoreCase = true)
+            } -> PRIORITY_HIGHEST
+            else -> PRIORITY_NONE
+        }
+    }
+
+    override val attributionLinks = mapOf(
+        weatherAttribution to "https://www.metoffice.gov.uk/"
+    )
+
+    private val mApi by lazy {
+        client
+            .baseUrl(MET_OFFICE_BASE_URL)
+            .build()
+            .create(MetOfficeApi::class.java)
+    }
 
     override fun requestWeather(
         context: Context,
         location: Location,
         requestedFeatures: List<SourceFeature>,
     ): Observable<WeatherWrapper> {
-        throw NonFreeNetSourceException()
+        val apiKey = getApiKeyOrDefault()
+
+        return Observable.zip(
+            mApi.getHourlyForecast(apiKey, location.latitude, location.longitude),
+            mApi.getDailyForecast(apiKey, location.latitude, location.longitude)
+        ) { hourly, daily ->
+            if (hourly.features.isEmpty() || daily.features.isEmpty()) {
+                throw InvalidOrIncompleteDataException()
+            }
+            WeatherWrapper(
+                dailyForecast = getDailyForecast(daily, location, context),
+                hourlyForecast = getHourlyForecast(hourly, context)
+            )
+        }
     }
 
-    override val isConfigured = true
-    override val isRestricted = false
+    private fun getDailyForecast(
+        dailyResult: MetOfficeForecast<MetOfficeDaily>,
+        location: Location,
+        context: Context,
+    ): List<DailyWrapper> {
+        val feature = dailyResult.features[0] // should only be one feature for this kind of API call
+        return feature.properties.timeSeries.map { result ->
+            val (dayText, dayCode) = convertWeatherCode(result.daySignificantWeatherCode, context)
+                ?: Pair(null, null)
+            val (nightText, nightCode) = convertWeatherCode(result.nightSignificantWeatherCode, context)
+                ?: Pair(null, null)
 
-    override fun getPreferences(context: Context): List<Preference> = emptyList()
+            // Given as UTC, we need to convert in the correct timezone at 00:00
+            val dayInUTCCalendar = result.time.toCalendarWithTimeZone(TimeZone.getTimeZone("UTC"))
+            val dayInLocalCalendar = Calendar.getInstance(location.timeZone).apply {
+                set(Calendar.YEAR, dayInUTCCalendar[Calendar.YEAR])
+                set(Calendar.MONTH, dayInUTCCalendar[Calendar.MONTH])
+                set(Calendar.DAY_OF_MONTH, dayInUTCCalendar[Calendar.DAY_OF_MONTH])
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+            val theDayInLocal = dayInLocalCalendar.time
+
+            DailyWrapper(
+                date = theDayInLocal,
+                day = HalfDayWrapper(
+                    weatherText = dayText,
+                    weatherCode = dayCode,
+                    temperature = TemperatureWrapper(
+                        temperature = result.dayMaxScreenTemperature?.celsius,
+                        feelsLike = result.dayMaxFeelsLikeTemp?.celsius
+                    ),
+                    precipitationProbability = PrecipitationProbability(
+                        total = result.dayProbabilityOfPrecipitation?.percent,
+                        rain = result.dayProbabilityOfRain?.percent,
+                        snow = result.dayProbabilityOfSnow?.percent,
+                        thunderstorm = result.dayProbabilityOfSferics?.percent
+                    )
+                ),
+                night = HalfDayWrapper(
+                    weatherText = nightText,
+                    weatherCode = nightCode,
+                    temperature = TemperatureWrapper(
+                        temperature = result.nightMinScreenTemperature?.celsius,
+                        feelsLike = result.nightMinFeelsLikeTemp?.celsius
+                    ),
+                    precipitationProbability = PrecipitationProbability(
+                        total = result.nightProbabilityOfPrecipitation?.percent,
+                        rain = result.nightProbabilityOfRain?.percent,
+                        snow = result.nightProbabilityOfSnow?.percent,
+                        thunderstorm = result.nightProbabilityOfSferics?.percent
+                    )
+                ),
+                uV = UV(index = result.maxUvIndex?.toDouble())
+            )
+        }
+    }
+
+    /**
+     * Returns hourly forecast
+     */
+    private fun getHourlyForecast(
+        hourlyResult: MetOfficeForecast<MetOfficeHourly>,
+        context: Context,
+    ): List<HourlyWrapper> {
+        val feature = hourlyResult.features[0] // should only be one feature for this kind of API call
+        return feature.properties.timeSeries.map { result ->
+            val (weatherText, weatherCode) = convertWeatherCode(result.significantWeatherCode, context)
+                ?: Pair(null, null)
+            HourlyWrapper(
+                date = result.time,
+                weatherText = weatherText,
+                weatherCode = weatherCode,
+                temperature = TemperatureWrapper(
+                    temperature = result.screenTemperature?.celsius,
+                    feelsLike = result.feelsLikeTemperature?.celsius
+                ),
+                precipitation = Precipitation(
+                    total = result.totalPrecipAmount?.millimeters,
+                    snow = result.totalSnowAmount?.millimeters
+                ),
+                precipitationProbability = PrecipitationProbability(
+                    total = result.probOfPrecipitation?.percent
+                ),
+                wind = Wind(
+                    degree = result.windDirectionFrom10m?.toDouble(),
+                    speed = result.windSpeed10m?.metersPerSecond,
+                    gusts = result.windGustSpeed10m?.metersPerSecond
+                ),
+                uV = UV(
+                    index = result.uvIndex?.toDouble()
+                ),
+                relativeHumidity = result.screenRelativeHumidity?.percent,
+                dewPoint = result.screenDewPointTemperature?.celsius,
+                pressure = result.mslp?.toDouble()?.pascals,
+                visibility = result.visibility?.toDouble()?.meters
+            )
+        }
+    }
+
+    private fun convertWeatherCode(
+        significantWeatherCode: Int?,
+        context: Context,
+    ): Pair<String, WeatherCode>? {
+        return when (significantWeatherCode) {
+            -1 -> Pair("Trace rain", WeatherCode.CLOUDY)
+            0 -> Pair(context.getString(R.string.common_weather_text_clear_sky), WeatherCode.CLEAR)
+            1 -> Pair(context.getString(R.string.common_weather_text_clear_sky), WeatherCode.CLEAR)
+            2, 3 -> Pair(context.getString(R.string.common_weather_text_partly_cloudy), WeatherCode.PARTLY_CLOUDY)
+            5 -> Pair(context.getString(R.string.common_weather_text_mist), WeatherCode.FOG)
+            6 -> Pair(context.getString(R.string.common_weather_text_fog), WeatherCode.FOG)
+            7 -> Pair(context.getString(R.string.common_weather_text_cloudy), WeatherCode.CLOUDY)
+            8 -> Pair(context.getString(R.string.common_weather_text_overcast), WeatherCode.CLOUDY)
+            9, 10 -> Pair(context.getString(R.string.common_weather_text_rain_showers_light), WeatherCode.RAIN)
+            11 -> Pair(context.getString(R.string.common_weather_text_drizzle), WeatherCode.RAIN)
+            12 -> Pair(context.getString(R.string.common_weather_text_rain_light), WeatherCode.RAIN)
+            13, 14 -> Pair(context.getString(R.string.common_weather_text_rain_showers_heavy), WeatherCode.RAIN)
+            15 -> Pair(context.getString(R.string.common_weather_text_rain_heavy), WeatherCode.RAIN)
+            16, 17 -> Pair(context.getString(R.string.metno_weather_text_sleetshowers), WeatherCode.SLEET)
+            18 -> Pair(context.getString(R.string.metno_weather_text_sleet), WeatherCode.SLEET)
+            19, 20 -> Pair("Hail shower", WeatherCode.HAIL)
+            21 -> Pair(context.getString(R.string.weather_kind_hail), WeatherCode.HAIL)
+            22, 23 -> Pair(context.getString(R.string.common_weather_text_snow_showers_light), WeatherCode.SNOW)
+            24 -> Pair(context.getString(R.string.common_weather_text_snow_light), WeatherCode.SNOW)
+            25, 26 -> Pair(context.getString(R.string.common_weather_text_snow_showers_heavy), WeatherCode.SNOW)
+            27 -> Pair(context.getString(R.string.common_weather_text_snow_heavy), WeatherCode.SNOW)
+            28, 29 -> Pair(context.getString(R.string.weather_kind_thunderstorm), WeatherCode.THUNDERSTORM)
+            30 -> Pair(context.getString(R.string.weather_kind_thunder), WeatherCode.THUNDER)
+            else -> null
+        }
+    }
+
+    // CONFIG
+    private val config = SourceConfigStore(context, id)
+    private var apikey: String
+        set(value) {
+            config.edit().putString("apikey", value).apply()
+        }
+        get() = config.getString("apikey", null) ?: ""
+
+    private fun getApiKeyOrDefault(): String {
+        return apikey.ifEmpty { BuildConfig.MET_OFFICE_KEY }
+    }
+    override val isConfigured
+        get() = getApiKeyOrDefault().isNotEmpty()
+
+    override val isRestricted
+        get() = apikey.isEmpty()
+
+    override fun getPreferences(context: Context): List<Preference> {
+        return listOf(
+            EditTextPreference(
+                titleId = R.string.settings_weather_source_met_office_api_key,
+                summary = { c, content ->
+                    content.ifEmpty {
+                        c.getString(R.string.settings_source_default_value)
+                    }
+                },
+                content = apikey,
+                onValueChanged = {
+                    apikey = it
+                }
+            )
+        )
+    }
+
+    companion object {
+        private const val MET_OFFICE_BASE_URL =
+            "https://data.hub.api.metoffice.gov.uk/sitespecific/v0/"
+    }
 }
