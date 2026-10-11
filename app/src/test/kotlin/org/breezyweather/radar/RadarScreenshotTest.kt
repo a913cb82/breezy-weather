@@ -3,17 +3,15 @@ package org.breezyweather.radar
 import android.graphics.BitmapFactory
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.breezyweather.R
 import org.breezyweather.ui.radar.RadarDetailContent
@@ -58,18 +56,22 @@ class RadarScreenshotTest {
 
     @Test
     fun radarCard() {
-        ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
-            scenario.onActivity { activity ->
-                val themed = ContextThemeWrapper(activity, R.style.BreezyWeatherTheme)
-                val card = LayoutInflater.from(themed)
-                    .inflate(R.layout.container_main_radar, null)
-                card.findViewById<ImageView>(R.id.radar_snapshot)
-                    .setImageBitmap(fixtureBitmap())
-                card.findViewById<TextView>(R.id.radar_subtitle).text = "Updated 10 min ago"
-                activity.setContentView(card)
-            }
-            onView(isRoot()).captureRoboImage()
-        }
+        val app = org.robolectric.RuntimeEnvironment.getApplication()
+        val themed = ContextThemeWrapper(app, R.style.BreezyWeatherTheme)
+        val card = LayoutInflater.from(themed)
+            .inflate(R.layout.container_main_radar, null)
+        card.layoutParams = ViewGroup.LayoutParams(
+            1080, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        card.findViewById<ImageView>(R.id.radar_snapshot)
+            .setImageBitmap(fixtureBitmap())
+        card.findViewById<TextView>(R.id.radar_subtitle).text = "Updated 10 min ago"
+        card.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        card.layout(0, 0, 1080, card.measuredHeight)
+        card.captureRoboImage()
     }
 
     @Test
@@ -99,7 +101,7 @@ class RadarScreenshotTest {
     }
 
     @Test
-    @Config(qualifiers = "w1080dp-h2400dp-420dpi+night")
+    @Config(qualifiers = "w1080dp-h2400dp-420dpi-night")
     fun radarDetailNight() {
         val bitmap = fixtureBitmap().asImageBitmap()
         val manifest = fakeManifest()
