@@ -3,6 +3,7 @@ import argparse
 import io
 import json
 import os
+import urllib.error
 from datetime import datetime, timedelta, timezone
 
 from wx_tiles import grid, lut, manifest as manifest_mod
@@ -79,6 +80,7 @@ def run_cycle(out_dir: str, base_url: str, now=None, zmin=0, zmax=7,
     print(f"{len(frames)} frames")
     os.makedirs(out_dir, exist_ok=True)
     rendered = []
+    rendered_frames = []
     latest_obs = None
 
     def _write_snapshot_and_mask(g):
@@ -106,13 +108,21 @@ def run_cycle(out_dir: str, base_url: str, now=None, zmin=0, zmax=7,
             sub = "model/" + f["t"][:16].replace("-", "").replace(":", "") + "Z"
         if os.path.exists(os.path.join(out_dir, sub, "DONE")):
             rendered.append((f["t"], -1))
+            rendered_frames.append(f)  # tiles already on disk: keep in manifest
             continue
-        if f["kind"] == "obs":
-            blob = fetch(_https(RADAR_BUCKET, radar_key(dt)))
-            g = grid.parse_radar(blob)
-        else:
-            blob = fetch(_https(MODEL_BUCKET, model_key(f["run"], f["t"][:16].replace("-", "").replace(":", "") + "Z")))
-            g = grid.parse_ukv(blob)
+        try:
+            if f["kind"] == "obs":
+                blob = fetch(_https(RADAR_BUCKET, radar_key(dt)))
+                g = grid.parse_radar(blob)
+            else:
+                blob = fetch(_https(MODEL_BUCKET, model_key(f["run"], f["t"][:16].replace("-", "").replace(":", "") + "Z")))
+                g = grid.parse_ukv(blob)
+        except urllib.error.URLError as e:
+            # Frame not (yet) published or network down: skip it, keep the
+            # cycle alive so manifest.json still reflects rendered frames.
+            print(f"warn: skip {f['t']} ({e})")
+            rendered.append((f["t"], -3))
+            continue
         def sink(idx, png, _sub=sub):
             z, x, y = idx
             p = os.path.join(out_dir, _sub, str(z), str(x))
@@ -125,12 +135,14 @@ def run_cycle(out_dir: str, base_url: str, now=None, zmin=0, zmax=7,
             fh.write(f["t"])
         new_count += 1
         rendered.append((f["t"], len(tiles)))
+        rendered_frames.append(f)
         if f["kind"] == "obs":
             latest_obs = g
     if latest_obs is not None:
         _write_snapshot_and_mask(latest_obs)
-    now_index = max(i for i, f in enumerate(frames) if f["kind"] == "obs")
-    m = manifest_mod.build_manifest(frames, now_index, base_url,
+    obs_idx = [i for i, f in enumerate(rendered_frames) if f["kind"] == "obs"]
+    now_index = max(obs_idx) if obs_idx else -1
+    m = manifest_mod.build_manifest(rendered_frames, now_index, base_url,
                                     snapshot=base_url + "/snapshot.png",
                                     coverage=base_url + "/mask/{z}/{x}/{y}.png")
     with open(os.path.join(out_dir, "manifest.json"), "w") as fh:
