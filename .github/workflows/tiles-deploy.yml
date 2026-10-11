@@ -1,0 +1,74 @@
+# Radar tiles auto-deploy: renders Met Office tiles every 15 min and
+# publishes the current window to GitHub Pages (free, no server).
+# Phone fetches https://a913cb82.github.io/breezy-weather/tiles/manifest.json
+# History stays bounded: peaceiris force_orphan keeps gh-pages at 1 commit,
+# and frames older than the timeline window are pruned before deploy.
+
+name: Radar tiles deploy
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: tiles-deploy
+  cancel-in-progress: true
+
+jobs:
+  render-and-deploy:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout pipeline branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: phase/2-pipeline
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pipeline/requirements.txt
+
+      - name: Install deps
+        run: pip install -r pipeline/requirements.txt
+
+      - name: Render cycle
+        run: |
+          cd pipeline
+          PYTHONPATH=src python -u -m wx_tiles.pipeline \
+            --out "$GITHUB_WORKSPACE/tiles" \
+            --base-url https://a913cb82.github.io/breezy-weather/tiles
+
+      - name: Prune frames outside the window
+        run: |
+          python3 - <<'EOF'
+          import os, re
+          from datetime import datetime, timedelta, timezone
+          root = os.environ["GITHUB_WORKSPACE"] + "/tiles"
+          cutoff = datetime.now(timezone.utc) - timedelta(hours=12)
+          for kind, pat in (("obs", re.compile(r"^(\d{8}T\d{4})$")),
+                            ("model", re.compile(r"^(\d{8}T\d{4})Z$"))):
+              d = os.path.join(root, kind)
+              if not os.path.isdir(d):
+                  continue
+              for name in os.listdir(d):
+                  m = pat.match(name)
+                  if not m:
+                      continue
+                  dt = datetime.strptime(m.group(1), "%Y%m%dT%H%M").replace(tzinfo=timezone.utc)
+                  if dt < cutoff:
+                      import shutil
+                      shutil.rmtree(os.path.join(d, name))
+                      print("pruned", kind, name)
+          EOF
+          echo "prune done"
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./tiles
+          force_orphan: true
