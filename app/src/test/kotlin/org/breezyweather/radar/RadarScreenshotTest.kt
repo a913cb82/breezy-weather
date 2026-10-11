@@ -61,7 +61,8 @@ class RadarScreenshotTest {
         val card = LayoutInflater.from(themed)
             .inflate(R.layout.container_main_radar, null)
         card.layoutParams = ViewGroup.LayoutParams(
-            1080, ViewGroup.LayoutParams.WRAP_CONTENT
+            1080,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         )
         card.findViewById<ImageView>(R.id.radar_snapshot)
             .setImageBitmap(fixtureBitmap())
