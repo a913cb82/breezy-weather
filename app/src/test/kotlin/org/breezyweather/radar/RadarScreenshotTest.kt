@@ -3,22 +3,23 @@ package org.breezyweather.radar
 import android.graphics.BitmapFactory
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.breezyweather.R
 import org.breezyweather.ui.radar.RadarDetailContent
+import org.breezyweather.ui.theme.compose.BreezyWeatherTheme
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
@@ -31,7 +32,7 @@ import java.io.File
  */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [34])
+@Config(sdk = [34], qualifiers = "w1080dp-h2400dp-420dpi")
 class RadarScreenshotTest {
 
     private fun fixtureBitmap() =
@@ -57,17 +58,18 @@ class RadarScreenshotTest {
 
     @Test
     fun radarCard() {
-        val activity = Robolectric.buildActivity(ComponentActivity::class.java).setup().get()
-        val themed = ContextThemeWrapper(activity, R.style.BreezyWeatherTheme)
-        val card = LayoutInflater.from(themed).inflate(R.layout.container_main_radar, null)
-        card.findViewById<ImageView>(R.id.radar_snapshot).setImageBitmap(fixtureBitmap())
-        card.findViewById<TextView>(R.id.radar_subtitle).text = "Updated 10 min ago"
-        card.measure(
-            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-        card.layout(0, 0, 1080, card.measuredHeight)
-        card.captureRoboImage()
+        ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
+            scenario.onActivity { activity ->
+                val themed = ContextThemeWrapper(activity, R.style.BreezyWeatherTheme)
+                val card = LayoutInflater.from(themed)
+                    .inflate(R.layout.container_main_radar, null)
+                card.findViewById<ImageView>(R.id.radar_snapshot)
+                    .setImageBitmap(fixtureBitmap())
+                card.findViewById<TextView>(R.id.radar_subtitle).text = "Updated 10 min ago"
+                activity.setContentView(card)
+            }
+            onView(isRoot()).captureRoboImage()
+        }
     }
 
     @Test
@@ -76,21 +78,49 @@ class RadarScreenshotTest {
         val bitmap = fixtureBitmap().asImageBitmap()
         val manifest = fakeManifest()
         captureRoboImage {
-            RadarDetailContent(
-                manifest = manifest,
-                frame = manifest.frames[1],
-                frameIndex = 1,
-                onFrameChange = {},
-                readout = "1.0–2.0 mm/h · obs",
-                mapContent = {
-                    Image(
-                        bitmap = bitmap,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            )
+            BreezyWeatherTheme {
+                RadarDetailContent(
+                    manifest = manifest,
+                    frame = manifest.frames[1],
+                    frameIndex = 1,
+                    onFrameChange = {},
+                    readout = "1.0–2.0 mm/h · obs",
+                    mapContent = {
+                        Image(
+                            bitmap = bitmap,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                )
+            }
+        }
+    }
+
+    @Test
+    @Config(qualifiers = "w1080dp-h2400dp-420dpi+night")
+    fun radarDetailNight() {
+        val bitmap = fixtureBitmap().asImageBitmap()
+        val manifest = fakeManifest()
+        captureRoboImage {
+            BreezyWeatherTheme {
+                RadarDetailContent(
+                    manifest = manifest,
+                    frame = manifest.frames[2],
+                    frameIndex = 2,
+                    onFrameChange = {},
+                    readout = null,
+                    mapContent = {
+                        Image(
+                            bitmap = bitmap,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                )
+            }
         }
     }
 }

@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.breezyweather.R
+import org.breezyweather.ui.theme.compose.BreezyWeatherTheme
 import org.breezyweather.radar.RadarConfig
 import org.breezyweather.radar.RadarFrame
 import org.breezyweather.radar.RadarLut
@@ -84,6 +85,7 @@ fun RadarScreen(
         }
     }
 
+    BreezyWeatherTheme {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -122,7 +124,7 @@ fun RadarScreen(
             )
         }
     }
-}
+    }
 
 @Composable
 private fun RadarMap(
