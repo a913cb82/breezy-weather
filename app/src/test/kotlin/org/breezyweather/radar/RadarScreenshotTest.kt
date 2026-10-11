@@ -97,7 +97,7 @@ class RadarScreenshotTest {
     }
 
     @Test
-    @Config(qualifiers = "w1080dp-h2400dp-420dpi-night")
+    @Config(qualifiers = "w1080dp-h2400dp-night-420dpi")
     fun radarDetailNight() {
         val bitmap = fixtureBitmap().asImageBitmap()
         val manifest = fakeManifest()
