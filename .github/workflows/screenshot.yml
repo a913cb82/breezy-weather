@@ -14,7 +14,9 @@ concurrency:
 
 jobs:
   shots:
-    runs-on: ubuntu-24.04
+    # macOS ARM runners do hardware-accelerated ARM emulation (boots fast);
+    # Linux runners here have no KVM and software emulation never boots.
+    runs-on: macos-15
     timeout-minutes: 50
     steps:
       - name: Checkout
@@ -35,7 +37,7 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKMANAGER" --licenses > /dev/null
           "$SDKMANAGER" "platform-tools" "platforms;android-37.0" "build-tools;37.0.0" \
-            "emulator" "system-images;android-30;default;x86_64"
+            "emulator" "system-images;android-36;google_apis;arm64-v8a"
 
       - name: Assemble freenet debug
         run: ./gradlew assembleFreenetDebug --console=plain
@@ -46,14 +48,14 @@ jobs:
       - name: Run emulator + capture
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
-          target: default
-          arch: x86_64
+          api-level: 36
+          target: google_apis
+          arch: arm64-v8a
           profile: pixel_7
-          emulator-options: -no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect
+          emulator-options: -no-snapshot-save -noaudio -no-boot-anim
           script: |
             ls app/build/outputs/apk/freenet/debug/
-            export APK=$PWD/app/build/outputs/apk/freenet/debug/app-freenet-x86_64-debug.apk
+            export APK=$PWD/app/build/outputs/apk/freenet/debug/app-freenet-arm64-v8a-debug.apk
             export SHOT_OUT=$PWD/screenshots
             python3 .github/scripts/emulator-shots.py
 
