@@ -25,6 +25,10 @@
     <string name="ephemeris_polar_day">Polar day</string>
     <string name="ephemeris_polar_night">Polar night</string>
     <string name="clock">Clock</string>
+    <string name="radar">Radar</string>
+    <string name="radar_updated_just_now">Updated just now</string>
+    <string name="radar_updated_minutes_ago">Updated %1$d min ago</string>
+    <string name="radar_unavailable">Radar unavailable</string>
     <!-- Alerts -->
     <string name="alert">Alert</string>
     <string name="alerts">Alerts</string>

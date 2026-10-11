@@ -44,6 +44,7 @@ import org.breezyweather.ui.main.adapters.main.holder.PollenViewHolder
 import org.breezyweather.ui.main.adapters.main.holder.PrecipitationNowcastViewHolder
 import org.breezyweather.ui.main.adapters.main.holder.PrecipitationViewHolder
 import org.breezyweather.ui.main.adapters.main.holder.PressureViewHolder
+import org.breezyweather.ui.main.adapters.main.holder.RadarViewHolder
 import org.breezyweather.ui.main.adapters.main.holder.SunViewHolder
 import org.breezyweather.ui.main.adapters.main.holder.UvViewHolder
 import org.breezyweather.ui.main.adapters.main.holder.VisibilityViewHolder
@@ -168,6 +169,13 @@ class MainAdapter(
                 ) {
                     continue
                 }
+                if (c === CardDisplay.CARD_RADAR &&
+                    !org.breezyweather.radar.RadarConfig.COVERED_COUNTRIES.any {
+                        location?.countryCode.equals(it, ignoreCase = true)
+                    }
+                ) {
+                    continue
+                }
                 mViewTypeList.add(getViewType(c))
             }
             mViewTypeList.add(ViewType.FOOTER)
@@ -199,6 +207,7 @@ class MainAdapter(
         ViewType.SUN -> SunViewHolder(parent)
         ViewType.MOON -> MoonViewHolder(parent)
         ViewType.CLOCK -> ClockViewHolder(parent)
+        ViewType.RADAR -> RadarViewHolder(parent)
         ViewType.FOOTER -> FooterViewHolder(ComposeView(parent.context))
         else -> FooterViewHolder(ComposeView(parent.context))
     }
@@ -356,6 +365,7 @@ class MainAdapter(
             CardDisplay.CARD_SUN -> ViewType.SUN
             CardDisplay.CARD_MOON -> ViewType.MOON
             CardDisplay.CARD_CLOCK -> ViewType.CLOCK
+            CardDisplay.CARD_RADAR -> ViewType.RADAR
         }
 
         private fun getCardDisplay(viewType: Int): CardDisplay? = when (viewType) {
@@ -373,6 +383,7 @@ class MainAdapter(
             ViewType.SUN -> CardDisplay.CARD_SUN
             ViewType.MOON -> CardDisplay.CARD_MOON
             ViewType.CLOCK -> CardDisplay.CARD_CLOCK
+            ViewType.RADAR -> CardDisplay.CARD_RADAR
             else -> null
         }
     }
