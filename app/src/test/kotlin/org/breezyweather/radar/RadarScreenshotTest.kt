@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -81,21 +82,32 @@ class RadarScreenshotTest {
                 androidx.compose.material3.Surface(
                     color = androidx.compose.material3.MaterialTheme.colorScheme.background
                 ) {
-                    RadarDetailContent(
-                        manifest = manifest,
-                        frame = manifest.frames[1],
-                        frameIndex = 1,
-                        onFrameChange = {},
-                        readout = "1.0–2.0 mm/h · obs",
-                        mapContent = {
-                            Image(
-                                bitmap = bitmap,
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
+                    androidx.compose.material3.Scaffold(
+                        topBar = {
+                            androidx.compose.material3.TopAppBar(
+                                title = {
+                                    androidx.compose.material3.Text("Radar")
+                                }
                             )
                         }
-                    )
+                    ) { padding ->
+                        RadarDetailContent(
+                            manifest = manifest,
+                            frame = manifest.frames[1],
+                            frameIndex = 1,
+                            onFrameChange = {},
+                            readout = "1.0–2.0 mm/h · obs",
+                            modifier = Modifier.padding(padding),
+                            mapContent = {
+                                Image(
+                                    bitmap = bitmap,
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
