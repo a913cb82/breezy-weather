@@ -55,15 +55,28 @@ class RadarScreenshotTest {
     @Test
     @Config(qualifiers = "w1080dp-h800dp-420dpi")
     fun radarCard() {
+        captureCard("Updated 10 min ago", withArt = true)
+    }
+
+    @Test
+    @Config(qualifiers = "w1080dp-h800dp-420dpi")
+    fun radarCardUnavailable() {
+        captureCard("Radar unavailable", withArt = false)
+    }
+
+    private fun captureCard(subtitle: String, withArt: Boolean) {
         androidx.test.core.app.ActivityScenario.launch(ScreenshotActivity::class.java)
             .use { scenario ->
                 scenario.onActivity { activity ->
                     val card = LayoutInflater.from(activity)
                         .inflate(R.layout.container_main_radar, null)
-                    card.findViewById<ImageView>(R.id.radar_snapshot)
-                        .setImageBitmap(fixtureBitmap())
-                    card.findViewById<TextView>(R.id.radar_subtitle).text =
-                        "Updated 10 min ago"
+                    val art = card.findViewById<ImageView>(R.id.radar_snapshot)
+                    if (withArt) {
+                        art.setImageBitmap(fixtureBitmap())
+                    } else {
+                        art.visibility = android.view.View.GONE
+                    }
+                    card.findViewById<TextView>(R.id.radar_subtitle).text = subtitle
                     activity.setContentView(card)
                 }
                 androidx.test.espresso.Espresso.onView(
