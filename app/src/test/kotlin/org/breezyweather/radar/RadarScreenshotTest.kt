@@ -52,6 +52,7 @@ class RadarScreenshotTest {
     )
 
     @Test
+    @Config(qualifiers = "w1080dp-h800dp-420dpi")
     fun radarCard() {
         androidx.test.core.app.ActivityScenario.launch(ScreenshotActivity::class.java)
             .use { scenario ->
@@ -77,21 +78,25 @@ class RadarScreenshotTest {
         val manifest = fakeManifest()
         captureRoboImage {
             BreezyWeatherTheme {
-                RadarDetailContent(
-                    manifest = manifest,
-                    frame = manifest.frames[1],
-                    frameIndex = 1,
-                    onFrameChange = {},
-                    readout = "1.0–2.0 mm/h · obs",
-                    mapContent = {
-                        Image(
-                            bitmap = bitmap,
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                )
+                androidx.compose.material3.Surface(
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                ) {
+                    RadarDetailContent(
+                        manifest = manifest,
+                        frame = manifest.frames[1],
+                        frameIndex = 1,
+                        onFrameChange = {},
+                        readout = "1.0–2.0 mm/h · obs",
+                        mapContent = {
+                            Image(
+                                bitmap = bitmap,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                    )
+                }
             }
         }
     }
@@ -103,21 +108,25 @@ class RadarScreenshotTest {
         val manifest = fakeManifest()
         captureRoboImage {
             BreezyWeatherTheme {
-                RadarDetailContent(
-                    manifest = manifest,
-                    frame = manifest.frames[2],
-                    frameIndex = 2,
-                    onFrameChange = {},
-                    readout = null,
-                    mapContent = {
-                        Image(
-                            bitmap = bitmap,
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                )
+                androidx.compose.material3.Surface(
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                ) {
+                    RadarDetailContent(
+                        manifest = manifest,
+                        frame = manifest.frames[2],
+                        frameIndex = 2,
+                        onFrameChange = {},
+                        readout = null,
+                        mapContent = {
+                            Image(
+                                bitmap = bitmap,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                    )
+                }
             }
         }
     }
