@@ -100,24 +100,9 @@ fun RadarScreen(
         ) { padding ->
             val m = manifest
             when {
-                m == null && !failed -> Box(
-                    modifier = Modifier.fillMaxSize().padding(padding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-                m == null -> Box(
-                    modifier = Modifier.fillMaxSize().padding(padding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(stringResource(R.string.radar_unavailable))
-                }
-                m.frames.isEmpty() -> Box(
-                    modifier = Modifier.fillMaxSize().padding(padding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(stringResource(R.string.radar_unavailable))
-                }
+                m == null && !failed -> RadarLoadingContent(Modifier.fillMaxSize().padding(padding))
+                m == null -> RadarUnavailableContent(Modifier.fillMaxSize().padding(padding))
+                m.frames.isEmpty() -> RadarUnavailableContent(Modifier.fillMaxSize().padding(padding))
                 else -> RadarMap(
                     manifest = m,
                     modifier = Modifier.fillMaxSize().padding(padding)
@@ -199,6 +184,28 @@ private fun RadarMap(
             }
         }
     )
+}
+
+/** Manifest fetch in flight — also the JVM screenshot stand-in target. */
+@Composable
+internal fun RadarLoadingContent(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+/** Manifest fetch failed or frames empty — also the JVM screenshot stand-in target. */
+@Composable
+internal fun RadarUnavailableContent(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Text(stringResource(R.string.radar_unavailable))
+    }
 }
 
 /**

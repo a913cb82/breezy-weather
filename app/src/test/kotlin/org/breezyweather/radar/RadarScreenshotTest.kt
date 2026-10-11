@@ -13,6 +13,8 @@ import androidx.compose.ui.layout.ContentScale
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.breezyweather.R
 import org.breezyweather.ui.radar.RadarDetailContent
+import org.breezyweather.ui.radar.RadarLoadingContent
+import org.breezyweather.ui.radar.RadarUnavailableContent
 import org.breezyweather.ui.theme.compose.BreezyWeatherTheme
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -64,6 +66,12 @@ class RadarScreenshotTest {
         captureCard("Radar unavailable", withArt = false)
     }
 
+    @Test
+    @Config(qualifiers = "w1080dp-h800dp-night-420dpi")
+    fun radarCardNight() {
+        captureCard("Updated 10 min ago", withArt = true)
+    }
+
     private fun captureCard(subtitle: String, withArt: Boolean) {
         androidx.test.core.app.ActivityScenario.launch(ScreenshotActivity::class.java)
             .use { scenario ->
@@ -92,35 +100,53 @@ class RadarScreenshotTest {
         val manifest = fakeManifest()
         captureRoboImage {
             BreezyWeatherTheme {
-                androidx.compose.material3.Surface(
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
-                ) {
-                    androidx.compose.material3.Scaffold(
-                        topBar = {
-                            androidx.compose.material3.TopAppBar(
-                                title = {
-                                    androidx.compose.material3.Text("Radar")
-                                }
+                DetailShell { padding ->
+                    RadarDetailContent(
+                        manifest = manifest,
+                        frame = manifest.frames[1],
+                        frameIndex = 1,
+                        onFrameChange = {},
+                        readout = "1.0–2.0 mm/h · obs",
+                        modifier = Modifier.padding(padding),
+                        mapContent = {
+                            Image(
+                                bitmap = bitmap,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
                             )
                         }
-                    ) { padding ->
-                        RadarDetailContent(
-                            manifest = manifest,
-                            frame = manifest.frames[1],
-                            frameIndex = 1,
-                            onFrameChange = {},
-                            readout = "1.0–2.0 mm/h · obs",
-                            modifier = Modifier.padding(padding),
-                            mapContent = {
-                                Image(
-                                    bitmap = bitmap,
-                                    contentDescription = null,
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.Crop
-                                )
-                            }
-                        )
-                    }
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun radarLoading() {
+        captureRoboImage {
+            BreezyWeatherTheme {
+                DetailShell { padding ->
+                    RadarLoadingContent(
+                        androidx.compose.ui.Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun radarDetailUnavailable() {
+        captureRoboImage {
+            BreezyWeatherTheme {
+                DetailShell { padding ->
+                    RadarUnavailableContent(
+                        androidx.compose.ui.Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                    )
                 }
             }
         }
@@ -133,9 +159,7 @@ class RadarScreenshotTest {
         val manifest = fakeManifest()
         captureRoboImage {
             BreezyWeatherTheme {
-                androidx.compose.material3.Surface(
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
-                ) {
+                DetailShell { _ ->
                     RadarDetailContent(
                         manifest = manifest,
                         frame = manifest.frames[2],
@@ -152,6 +176,37 @@ class RadarScreenshotTest {
                         }
                     )
                 }
+            }
+        }
+    }
+
+    @androidx.compose.runtime.Composable
+    private fun DetailShell(
+        content: @androidx.compose.runtime.Composable (
+            androidx.compose.foundation.layout.PaddingValues,
+        ) -> Unit,
+    ) {
+        androidx.compose.material3.Surface(
+            color = androidx.compose.material3.MaterialTheme.colorScheme.background
+        ) {
+            androidx.compose.material3.Scaffold(
+                topBar = {
+                    androidx.compose.material3.TopAppBar(
+                        title = {
+                            androidx.compose.material3.Text("Radar")
+                        },
+                        navigationIcon = {
+                            androidx.compose.material3.IconButton(onClick = {}) {
+                                androidx.compose.material3.Icon(
+                                    androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    )
+                }
+            ) { padding ->
+                content(padding)
             }
         }
     }
