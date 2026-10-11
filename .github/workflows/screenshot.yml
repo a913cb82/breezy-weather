@@ -1,0 +1,63 @@
+# Emulator screenshots: boots an x86_64 emulator, installs the freenet
+# debug APK, drives the app with adb/uiautomator (no app hooks), and uploads
+# screenshots as artifacts. Iterative: the driver logs every UI dump so blind
+# taps can be refined from run logs.
+
+name: Emulator screenshots
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: screenshots
+  cancel-in-progress: true
+
+jobs:
+  shots:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          java-version-file: .github/.java-version
+          distribution: temurin
+
+      - name: Set up gradle
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+
+      - name: Ensure SDK packages
+        run: |
+          set -e
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null
+          "$SDKMANAGER" "platform-tools" "platforms;android-37.0" "build-tools;37.0.0" \
+            "emulator" "system-images;android-36;google_apis;x86_64"
+
+      - name: Assemble freenet debug
+        run: ./gradlew assembleFreenetDebug --console=plain
+
+      - name: Run emulator + capture
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          emulator-options: -no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect
+          script: |
+            ls app/build/outputs/apk/freenet/debug/
+            export APK=$PWD/app/build/outputs/apk/freenet/debug/app-freenet-x86_64-debug.apk
+            export SHOT_OUT=$PWD/screenshots
+            python3 .github/scripts/emulator-shots.py
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-screenshots
+          path: screenshots/
+          retention-days: 14
