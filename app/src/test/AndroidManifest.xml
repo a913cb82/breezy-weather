@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Merged for Robolectric unit tests: host activity for View screenshots. -->
+    <application>
+        <activity
+            android:name="org.breezyweather.radar.ScreenshotActivity"
+            android:exported="false"
+            android:theme="@style/BreezyWeatherTheme" />
+    </application>
+</manifest>
