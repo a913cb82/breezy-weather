@@ -64,7 +64,6 @@ jobs:
                       print("pruned", kind, name)
           EOF
           echo "prune done"
-          EOF
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
