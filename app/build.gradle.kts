@@ -13,6 +13,7 @@ plugins {
     id("com.android.application")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.roborazzi)
     kotlin("plugin.serialization")
     id("com.mikepenz.aboutlibraries.plugin.android")
 }
@@ -21,6 +22,12 @@ val supportedAbi = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 configure<ApplicationExtension> {
     namespace = "org.breezyweather"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 
     defaultConfig {
         applicationId = "org.breezyweather"
@@ -485,6 +492,12 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     testImplementation(libs.bundles.test)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.espresso.core)
+    testImplementation(libs.test.core)
+    testRuntimeOnly(libs.junit.vintage)
     testRuntimeOnly(libs.junit.platform)
 
     // preference.

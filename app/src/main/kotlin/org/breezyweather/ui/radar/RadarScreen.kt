@@ -144,8 +144,14 @@ private fun RadarMap(
     // Small tile cache for tap-for-value (z7 tiles, ~50KB each).
     val tileCache = remember { mutableMapOf<String, Bitmap>() }
 
-    Column(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxWidth().weight(1f)) {
+    RadarDetailContent(
+        manifest = manifest,
+        frame = frame,
+        frameIndex = frameIndex,
+        onFrameChange = { frameIndex = it },
+        readout = readout,
+        modifier = modifier,
+        mapContent = {
             MaplibreMap(
                 baseStyle = org.maplibre.compose.style.BaseStyle.Uri(
                     if (dark) RadarConfig.STYLE_NIGHT else RadarConfig.STYLE_DAY
@@ -189,6 +195,27 @@ private fun RadarMap(
                 }
             }
         }
+    )
+}
+
+/**
+ * Map chrome (scrub bar, labels, readout) with a swappable map slot —
+ * production passes the live MapLibre map, JVM screenshots pass a stand-in.
+ */
+@Composable
+internal fun RadarDetailContent(
+    manifest: RadarManifest,
+    frame: RadarFrame,
+    frameIndex: Int,
+    onFrameChange: (Int) -> Unit,
+    readout: String?,
+    modifier: Modifier = Modifier,
+    mapContent: @Composable () -> Unit,
+) {
+    Column(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            mapContent()
+        }
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
             Text(
                 text = frameLabel(frame, frameIndex == manifest.nowIndex),
@@ -196,7 +223,7 @@ private fun RadarMap(
             )
             Slider(
                 value = frameIndex.toFloat(),
-                onValueChange = { frameIndex = it.toInt() },
+                onValueChange = { onFrameChange(it.toInt()) },
                 valueRange = 0f..manifest.frames.lastIndex.toFloat(),
                 steps = (manifest.frames.size - 2).coerceAtLeast(0),
                 modifier = Modifier.fillMaxWidth()

@@ -1,7 +1,7 @@
-# Emulator screenshots: boots an x86_64 emulator, installs the freenet
-# debug APK, drives the app with adb/uiautomator (no app hooks), and uploads
-# screenshots as artifacts. Iterative: the driver logs every UI dump so blind
-# taps can be refined from run logs.
+# JVM screenshots (Roborazzi): renders the radar card (real snapshot PNG)
+# and the detail chrome (snapshot stand-in for the GL map, which cannot run
+# on JVM) as plain unit tests — no emulator, minutes per run. Record mode
+# always writes PNGs; artifacts kept 14 days.
 
 name: Emulator screenshots
 
@@ -14,10 +14,8 @@ concurrency:
 
 jobs:
   shots:
-    # macOS ARM runners do hardware-accelerated ARM emulation (boots fast);
-    # Linux runners here have no KVM and software emulation never boots.
-    runs-on: macos-15
-    timeout-minutes: 50
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -36,34 +34,15 @@ jobs:
           set -e
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKMANAGER" --licenses > /dev/null
-          "$SDKMANAGER" "platform-tools" "platforms;android-37.0" "build-tools;37.0.0" \
-            "emulator" "system-images;android-36;google_apis;arm64-v8a"
+          "$SDKMANAGER" "platform-tools" "platforms;android-37.0" "build-tools;37.0.0"
 
-      - name: Assemble freenet debug
-        run: ./gradlew assembleFreenetDebug --console=plain
-
-      - name: Install emulator system deps (Linux only)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq libpulse0
-
-      - name: Run emulator + capture
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 36
-          target: google_apis
-          arch: arm64-v8a
-          profile: pixel_7
-          emulator-options: -no-snapshot-save -noaudio -no-boot-anim
-          script: |
-            ls app/build/outputs/apk/freenet/debug/
-            export APK=$PWD/app/build/outputs/apk/freenet/debug/app-freenet-arm64-v8a-debug.apk
-            export SHOT_OUT=$PWD/screenshots
-            python3 .github/scripts/emulator-shots.py
+      - name: Record screenshots
+        run: ./gradlew recordRoborazziFreenetDebug --console=plain
 
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: app-screenshots
-          path: screenshots/
+          path: app/build/outputs/roborazzi/
           retention-days: 14
