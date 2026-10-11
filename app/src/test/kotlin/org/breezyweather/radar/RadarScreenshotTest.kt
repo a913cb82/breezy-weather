@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -198,7 +200,7 @@ class RadarScreenshotTest {
                         navigationIcon = {
                             androidx.compose.material3.IconButton(onClick = {}) {
                                 androidx.compose.material3.Icon(
-                                    androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack,
+                                    Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = null
                                 )
                             }
