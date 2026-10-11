@@ -29,6 +29,7 @@ kotlinx-serialization-csv = "3.2.2"
 kotlinx-serialization-json = "1.11.0"
 kotlinx-serialization-xml = "1.0.2.1"
 ktlint = "1.8.0"
+maplibre-compose = "0.12.1"
 #leakcanary = "2.14"
 lifecycle = "2.11.0"
 lifecycle-extensions = "2.2.0"
@@ -135,6 +136,7 @@ suncalc = { group = "org.shredzone.commons", name = "commons-suncalc", version.r
 swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico-views" }
+maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre-compose" }
 work-runtime = { group = "androidx.work", name = "work-runtime", version.ref = "work-runtime" }
 
 [plugins]

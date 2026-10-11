@@ -74,6 +74,14 @@ class RadarViewHolder(parent: ViewGroup) : AbstractMainCardViewHolder(
                     subtitleView.text = freshnessText(manifest)
                     itemView.contentDescription =
                         "${context.getString(R.string.radar)}: ${subtitleView.text}"
+                    itemView.setOnClickListener {
+                        context.startActivity(
+                            android.content.Intent(
+                                context,
+                                org.breezyweather.ui.radar.RadarActivity::class.java
+                            )
+                        )
+                    }
                 }
             }
         }
