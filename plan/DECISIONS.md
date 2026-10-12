@@ -43,3 +43,9 @@ Append-only log. Newest at bottom.
 - Detail shots share a `DetailShell` (Surface + Scaffold + TopAppBar with back arrow) mirroring production chrome; M3 icons render fine under Roborazzi (arrow visible).
 - Gallery: card day/night/unavailable + detail day/night/loading/unavailable; contact sheet in `plan/research/evidence/live-qa-2026-10-11/`.
 - Remaining shots need hardware: card in real main screen, live GL map over OFM basemap (`adb devices` empty, no KVM, macOS QEMU dead).
+
+## 2026-10-12 — Screenshots v2: real basemap composites, home-style host
+- Old set rightly rejected: transparent snapshot on white = invisible map, card floating in void, no app context.
+- New fixtures composite the LIVE snapshot over Esri light/dark-gray reference basemaps at the exact snapshot bbox (lon -11..3.5, lat 49.5..59.5) — test-only stand-ins, production renders OFM vector tiles. CartoDB was tried first but now needs an API key (watermarked tiles discarded).
+- Card tests host the real card in a wallpaper-tinted FrameLayout (day #C9E8F7 / night #0E141B) with 16dp list margins, matching the home screen.
+- Production card art gets a `colorSurfaceContainerLow` well so sparse days read as designed surface, not void.
