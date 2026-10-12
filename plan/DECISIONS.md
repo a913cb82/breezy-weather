@@ -37,3 +37,9 @@ Append-only log. Newest at bottom.
 - Compose `Text` invisible + Espresso `View should have Activity` / `Unable to resolve activity` fixed by: debug-manifest `ScreenshotActivity` host, `Surface(theme bg)` behind compose captures (transparent PNG showed black on dark text), per-method `@Config` qualifiers (`w1080dp-h800dp-420dpi` card framing, `-night-420dpi` order matters), fixture `radar-snapshot.png` as GL map stand-in.
 - Card art `centerCrop`→`fitCenter`+`adjustViewBounds`, height 200→280dp: crop showed a misleading empty sea slice of the tall UK map; fit shows the whole honest picture.
 - `~/.local/bin/ktlint` 1.8.0 standalone (repo-matched) for pre-push lint; CI `spotlessCheck` stays the gate.
+
+## 2026-10-12 — Full 7-shot JVM gallery, loading/unavailable extracted
+- `RadarScreen` loading spinner and unavailable text extracted to internal `RadarLoadingContent`/`RadarUnavailableContent` (same UI production shows, now directly capturable).
+- Detail shots share a `DetailShell` (Surface + Scaffold + TopAppBar with back arrow) mirroring production chrome; M3 icons render fine under Roborazzi (arrow visible).
+- Gallery: card day/night/unavailable + detail day/night/loading/unavailable; contact sheet in `plan/research/evidence/live-qa-2026-10-11/`.
+- Remaining shots need hardware: card in real main screen, live GL map over OFM basemap (`adb devices` empty, no KVM, macOS QEMU dead).
