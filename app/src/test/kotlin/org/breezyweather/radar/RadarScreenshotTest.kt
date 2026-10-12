@@ -26,17 +26,22 @@ import org.robolectric.annotation.GraphicsMode
 import java.io.File
 
 /**
- * JVM screenshots (Roborazzi, no device): the radar card inflated with the
- * real live snapshot PNG, and the detail chrome with a snapshot stand-in
+ * JVM screenshots (Roborazzi, no device): the radar card inflated on a
+ * home-screen-style background, and the detail chrome with a stand-in
  * for the GL map (MapLibre cannot render on JVM).
+ *
+ * Stand-ins composite the real live snapshot over an Esri light/dark-gray
+ * reference basemap (test fixtures only — production renders OFM vector
+ * tiles; basemap (c) Esri, TomTom, Garmin, FAO, NOAA, USGS,
+ * (c) OpenStreetMap contributors).
  */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [34], qualifiers = "w1080dp-h2400dp-420dpi")
 class RadarScreenshotTest {
 
-    private fun fixtureBitmap() =
-        BitmapFactory.decodeStream(File("src/test/resources/radar-snapshot.png").inputStream())
+    private fun fixtureBitmap(name: String) =
+        BitmapFactory.decodeStream(File("src/test/resources/$name.png").inputStream())
 
     private fun fakeManifest() = RadarManifest(
         generated = "2026-10-11T11:10:10Z",
@@ -59,35 +64,49 @@ class RadarScreenshotTest {
     @Test
     @Config(qualifiers = "w1080dp-h800dp-420dpi")
     fun radarCard() {
-        captureCard("Updated 10 min ago", withArt = true)
+        captureCard("Updated 10 min ago", art = "radar-map-day", background = 0xFFC9E8F7.toInt())
     }
 
     @Test
     @Config(qualifiers = "w1080dp-h800dp-420dpi")
     fun radarCardUnavailable() {
-        captureCard("Radar unavailable", withArt = false)
+        captureCard("Radar unavailable", art = null, background = 0xFFC9E8F7.toInt())
     }
 
     @Test
     @Config(qualifiers = "w1080dp-h800dp-night-420dpi")
     fun radarCardNight() {
-        captureCard("Updated 10 min ago", withArt = true)
+        captureCard("Updated 10 min ago", art = "radar-map-night", background = 0xFF0E141B.toInt())
     }
 
-    private fun captureCard(subtitle: String, withArt: Boolean) {
+    // Card hosted the way the home list shows it: wallpaper-tinted
+    // background, 16dp list margins.
+    private fun captureCard(subtitle: String, art: String?, background: Int) {
         androidx.test.core.app.ActivityScenario.launch(ScreenshotActivity::class.java)
             .use { scenario ->
                 scenario.onActivity { activity ->
                     val card = LayoutInflater.from(activity)
                         .inflate(R.layout.container_main_radar, null)
-                    val art = card.findViewById<ImageView>(R.id.radar_snapshot)
-                    if (withArt) {
-                        art.setImageBitmap(fixtureBitmap())
+                    val artView = card.findViewById<ImageView>(R.id.radar_snapshot)
+                    if (art != null) {
+                        artView.setImageBitmap(fixtureBitmap(art))
                     } else {
-                        art.visibility = android.view.View.GONE
+                        artView.visibility = android.view.View.GONE
                     }
                     card.findViewById<TextView>(R.id.radar_subtitle).text = subtitle
-                    activity.setContentView(card)
+                    val pad = (16 * activity.resources.displayMetrics.density).toInt()
+                    val host = android.widget.FrameLayout(activity).apply {
+                        setBackgroundColor(background)
+                        setPadding(pad, pad, pad, pad)
+                        addView(
+                            card,
+                            android.widget.FrameLayout.LayoutParams(
+                                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+                            )
+                        )
+                    }
+                    activity.setContentView(host)
                 }
                 androidx.test.espresso.Espresso.onView(
                     androidx.test.espresso.matcher.ViewMatchers.isRoot()
@@ -97,8 +116,8 @@ class RadarScreenshotTest {
 
     @Test
     fun radarDetail() {
-        // Snapshot stand-in for the GL map (MapLibre cannot render on JVM).
-        val bitmap = fixtureBitmap().asImageBitmap()
+        // Basemap + live-snapshot composite stand-in for the GL map.
+        val bitmap = fixtureBitmap("radar-map-day").asImageBitmap()
         val manifest = fakeManifest()
         captureRoboImage {
             BreezyWeatherTheme {
@@ -157,7 +176,7 @@ class RadarScreenshotTest {
     @Test
     @Config(qualifiers = "w1080dp-h2400dp-night-420dpi")
     fun radarDetailNight() {
-        val bitmap = fixtureBitmap().asImageBitmap()
+        val bitmap = fixtureBitmap("radar-map-night").asImageBitmap()
         val manifest = fakeManifest()
         captureRoboImage {
             BreezyWeatherTheme {
