@@ -1,0 +1,776 @@
+{
+ "generated": "2026-10-14T21:54:57Z",
+ "now_index": 23,
+ "lut": [
+  {
+   "min_mm_h": 0.1,
+   "color": [
+    168,
+    230,
+    240
+   ]
+  },
+  {
+   "min_mm_h": 0.5,
+   "color": [
+    120,
+    200,
+    250
+   ]
+  },
+  {
+   "min_mm_h": 1.0,
+   "color": [
+    60,
+    140,
+    250
+   ]
+  },
+  {
+   "min_mm_h": 2.0,
+   "color": [
+    60,
+    60,
+    220
+   ]
+  },
+  {
+   "min_mm_h": 4.0,
+   "color": [
+    150,
+    60,
+    220
+   ]
+  },
+  {
+   "min_mm_h": 8.0,
+   "color": [
+    220,
+    60,
+    200
+   ]
+  },
+  {
+   "min_mm_h": 16.0,
+   "color": [
+    250,
+    140,
+    40
+   ]
+  },
+  {
+   "min_mm_h": 16.0,
+   "color": [
+    255,
+    60,
+    60
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "t": "2026-10-14T15:45:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1545/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T16:00:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1600/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T16:15:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1615/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T16:30:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1630/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T16:45:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1645/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T17:00:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1700/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T17:15:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1715/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T17:30:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1730/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T17:45:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1745/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T18:00:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1800/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T18:15:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1815/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T18:30:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1830/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T18:45:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1845/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T19:00:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1900/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T19:15:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1915/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T19:30:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1930/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T19:45:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T1945/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T20:00:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T2000/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T20:15:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T2015/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T20:30:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T2030/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T20:45:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T2045/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T21:00:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T2100/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T21:15:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T2115/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T21:30:00Z",
+   "kind": "obs",
+   "run": "-",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/obs/20261014T2130/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T21:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2145Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T22:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T22:15:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2215Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T22:30:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2230Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T22:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2245Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T23:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T23:15:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2315Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T23:30:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2330Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-14T23:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261014T2345Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T00:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T00:15:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0015Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T00:30:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0030Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T00:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0045Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T01:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T01:15:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0115Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T01:30:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0130Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T01:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0145Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T02:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T02:15:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0215Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T02:30:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0230Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T02:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0245Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T03:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T03:15:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0315Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T03:30:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0330Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T03:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0345Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T04:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0400Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T04:15:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0415Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T04:30:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0430Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T04:45:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0445Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T05:00:00Z",
+   "kind": "model",
+   "run": "20261014T1700Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0500Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T06:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0600Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T07:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0700Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T08:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0800Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T09:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T0900Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T10:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T11:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T12:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T13:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T14:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1400Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T15:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1500Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T16:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1600Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T17:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1700Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T18:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1800Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T19:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T1900Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T20:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T2000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T21:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T2100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T22:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T2200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-15T23:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261015T2300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T00:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T01:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T02:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T03:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T04:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0400Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T05:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0500Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T06:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0600Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T07:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0700Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T08:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0800Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T09:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T0900Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T10:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T11:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T12:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T13:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T14:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1400Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T15:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1500Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T16:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1600Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T17:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1700Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T18:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1800Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T19:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T1900Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T20:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T2000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T21:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T2100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T22:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T2200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-16T23:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261016T2300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-17T00:00:00Z",
+   "kind": "model",
+   "run": "20261014T1800Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261017T0000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-17T06:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261017T0600Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-17T09:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261017T0900Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-17T12:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261017T1200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-17T15:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261017T1500Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-17T18:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261017T1800Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-17T21:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261017T2100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T00:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T0000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T03:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T0300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T06:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T0600Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T09:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T0900Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T12:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T1200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T15:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T1500Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T18:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T1800Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-18T21:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261018T2100Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-19T00:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261019T0000Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-19T03:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261019T0300Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-19T06:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261019T0600Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-19T09:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261019T0900Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-19T12:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261019T1200Z/{z}/{x}/{y}.png"
+  },
+  {
+   "t": "2026-10-19T15:00:00Z",
+   "kind": "model",
+   "run": "20261014T1500Z",
+   "tiles": "https://a913cb82.github.io/breezy-weather/tiles/model/20261019T1500Z/{z}/{x}/{y}.png"
+  }
+ ],
+ "snapshot": "https://a913cb82.github.io/breezy-weather/tiles/snapshot.png",
+ "coverage": "https://a913cb82.github.io/breezy-weather/tiles/mask/{z}/{x}/{y}.png"
+}
